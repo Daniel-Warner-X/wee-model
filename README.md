@@ -1,21 +1,23 @@
-# Garbage Model API
+# Garbage Model
 
-A simple, standalone API service for getting model responses... when pretty much any model response will do.
+A simple, standalone API service for getting model responses when pretty much any model response will do.
 
 ## Quickstart
 
-### . Clone this repo
+### Clone this repo
 
-```git@github.com:Daniel-Warner-X/garbage-model.git
+```
+git@github.com:Daniel-Warner-X/garbage-model.git
 ```
 
-### 2. Quick Start
+### Run the start script
 
 ```bash
 ./start.sh
 ```
 
 After startup, you'll see:
+
 ```
 =================================
 ✓ Setup complete!
@@ -34,12 +36,21 @@ Add this header to your requests:
 
 ### 3. Test the health endpoint
 
-```curl http://localhost:8080/health | jq
+```
+curl http://localhost:8080/health | jq
 ```  
+
+### 4. Send a sample chat completion request
+
+```
+curl -X POST http://localhost:8080/chat -H "X-API-Key: your-api-key-here" -H "Content-Type: application/json" -d '{"messages": [{"role": "user", "content": "What is the capital of France?"}], "temperature": 0.7}'
+```
+
 
 ## API documentation
 
 http://localhost:8080/docs
+
 
 ## What the setup script does:
 
@@ -75,6 +86,7 @@ OLLAMA_MODEL=llama3.2:3b PORT=9000 ./start.sh
 Press `Ctrl+C` to stop the API server.
 
 Ollama will keep running in the background. To stop it:
+
 ```bash
 pkill ollama
 ```
