@@ -1,5 +1,4 @@
 <img width="200" height="157" alt="sleepy" src="https://github.com/user-attachments/assets/fe6673bb-9822-45ed-a472-15ac3ff51475" />
-<img width="423" height="333" alt="sleepy" src="https://github.com/user-attachments/assets/0432314d-f910-4d76-ac2f-d6dfa7e54e93" />
 
 # Wee Model
 
