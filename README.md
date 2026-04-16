@@ -1,3 +1,5 @@
+<img width="423" height="333" alt="sleepy" src="https://github.com/user-attachments/assets/0432314d-f910-4d76-ac2f-d6dfa7e54e93" />
+
 # Wee Model
 
 A simple, standalone API service for getting model responses when pretty much any model response will do.
