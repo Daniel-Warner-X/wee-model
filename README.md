@@ -46,10 +46,54 @@ curl http://localhost:8080/health | jq
 curl -X POST http://localhost:8080/chat -H "X-API-Key: your-api-key-here" -H "Content-Type: application/json" -d '{"messages": [{"role": "user", "content": "What is the capital of France?"}], "temperature": 0.7}'
 ```
 
+### 5. Try tool/function calling
+
+```bash
+python tool_example.py
+```
+
+
+## Features
+
+- **Chat completions**: Standard chat interface
+- **Tool/function calling**: Let the model call functions you define
+- **Structured extraction**: Extract JSON data from text
+- **JSON formatting**: Request JSON-formatted responses
 
 ## API documentation
 
 http://localhost:8080/docs
+
+## Tool/Function Calling
+
+The API supports tool/function calling, allowing the model to call functions you define. See `tool_example.py` for a complete example.
+
+Example request with tools:
+
+```bash
+curl -X POST http://localhost:8080/chat \
+  -H "X-API-Key: your-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "What is the weather in Boston?"}],
+    "tools": [{
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get current weather for a location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {"type": "string"}
+          },
+          "required": ["location"]
+        }
+      }
+    }]
+  }'
+```
+
+The response will include `tool_calls` when the model wants to call a function.
 
 
 ## What the setup script does:

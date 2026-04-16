@@ -53,7 +53,7 @@ class ExtractionRequest(BaseModel):
 class ChatRequest(BaseModel):
     """Request for chat completion."""
 
-    messages: list[dict[str, str]] = Field(
+    messages: list[dict[str, Any]] = Field(
         ..., description="List of messages with 'role' and 'content' keys"
     )
     temperature: float = Field(
@@ -64,6 +64,9 @@ class ChatRequest(BaseModel):
     )
     format_json: bool = Field(
         default=False, description="Request JSON formatted response"
+    )
+    tools: list[dict[str, Any]] | None = Field(
+        default=None, description="List of tools/functions available for the model to call"
     )
 
 
@@ -93,8 +96,9 @@ class ExtractionResponse(BaseModel):
 class ChatResponse(BaseModel):
     """Response from chat endpoint."""
 
-    content: str
+    content: str | None = None
     model_used: str
+    tool_calls: list[dict[str, Any]] | None = None
 
 
 # Ollama client
@@ -180,17 +184,31 @@ Return ONLY valid JSON matching the schema above. Do not include any explanation
             raise
 
     def chat(
-        self, messages: list[dict[str, str]], temperature: float = 0.7, format_json: bool = False
-    ) -> str:
+        self, messages: list[dict[str, Any]], temperature: float = 0.7, format_json: bool = False, tools: list[dict[str, Any]] | None = None
+    ) -> dict[str, Any]:
         """Send chat messages."""
         try:
-            response = self.client.chat(
-                model=self.model,
-                messages=messages,
-                format="json" if format_json else "",
-                options={"temperature": temperature},
-            )
-            return response["message"]["content"]
+            chat_params = {
+                "model": self.model,
+                "messages": messages,
+                "options": {"temperature": temperature},
+            }
+
+            if format_json:
+                chat_params["format"] = "json"
+
+            if tools:
+                chat_params["tools"] = tools
+
+            response = self.client.chat(**chat_params)
+
+            message = response["message"]
+            result = {
+                "content": message.get("content", ""),
+                "tool_calls": message.get("tool_calls")
+            }
+
+            return result
         except Exception as e:
             logger.error(f"Chat failed: {e}")
             raise
@@ -302,7 +320,7 @@ async def chat(
     _: str = Depends(verify_api_key),
 ):
     """
-    Chat completion.
+    Chat completion with optional tool/function calling support.
 
     Requires API key in X-API-Key header.
     """
@@ -310,13 +328,18 @@ async def chat(
         raise HTTPException(status_code=503, detail="Service not ready")
 
     try:
-        content = ollama_service.chat(
+        result = ollama_service.chat(
             messages=request.messages,
             temperature=request.temperature,
             format_json=request.format_json,
+            tools=request.tools,
         )
 
-        return ChatResponse(content=content, model_used=ollama_service.model)
+        return ChatResponse(
+            content=result["content"],
+            tool_calls=result["tool_calls"],
+            model_used=ollama_service.model
+        )
 
     except Exception as e:
         logger.error(f"Chat error: {e}")
@@ -337,13 +360,17 @@ async def complete(
         raise HTTPException(status_code=503, detail="Service not ready")
 
     try:
-        content = ollama_service.chat(
+        result = ollama_service.chat(
             messages=[{"role": "user", "content": request.prompt}],
             temperature=request.temperature,
             format_json=request.format_json,
         )
 
-        return ChatResponse(content=content, model_used=ollama_service.model)
+        return ChatResponse(
+            content=result["content"],
+            tool_calls=result["tool_calls"],
+            model_used=ollama_service.model
+        )
 
     except Exception as e:
         logger.error(f"Completion error: {e}")
