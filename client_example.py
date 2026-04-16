@@ -1,5 +1,5 @@
 """
-Example Python client for Garbage Model API
+Example Python client for Wee Model API
 
 Install requests first:
     pip install requests
@@ -10,8 +10,8 @@ import os
 import requests
 
 
-class GarbageModelClient:
-    """Simple client for Garbage Model API."""
+class WeeModelClient:
+    """Simple client for Wee Model API."""
 
     def __init__(self, api_key: str, base_url: str = "http://localhost:8080"):
         """
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         exit(1)
 
     # Initialize client
-    client = GarbageModelClient(api_key=api_key)
+    client = WeeModelClient(api_key=api_key)
 
     # Check health
     print("Health:", client.health())

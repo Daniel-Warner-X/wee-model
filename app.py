@@ -1,5 +1,5 @@
 """
-Garbage Model - Standalone Ollama API Service
+Wee Model - Standalone Ollama API Service
 A simple API service for structured data extraction using Ollama.
 """
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # API Key security
 API_KEY_HEADER = APIKeyHeader(name="X-API-Key", auto_error=True)
-VALID_API_KEY = os.getenv("API_KEY", "garbage-key-" + secrets.token_urlsafe(32))
+VALID_API_KEY = os.getenv("API_KEY", "wee-key-" + secrets.token_urlsafe(32))
 
 
 # Models
@@ -223,7 +223,7 @@ async def lifespan(app: FastAPI):
     """Startup and shutdown logic."""
     global ollama_service
 
-    logger.info("Starting Garbage Model API...")
+    logger.info("Starting Wee Model API...")
 
     # Initialize Ollama service
     model = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
@@ -238,17 +238,17 @@ async def lifespan(app: FastAPI):
         logger.error(f"Failed to ensure model {model}")
         raise RuntimeError("Model not available")
 
-    logger.info(f"✓ Garbage Model API ready with {model}")
+    logger.info(f"✓ Wee Model API ready with {model}")
     logger.info(f"✓ API Key: {VALID_API_KEY}")
 
     yield
 
-    logger.info("Shutting down Garbage Model API...")
+    logger.info("Shutting down Wee Model API...")
 
 
 # FastAPI app
 app = FastAPI(
-    title="Garbage Model API",
+    title="Wee Model API",
     description="Simple API for structured data extraction using Ollama",
     version="1.0.0",
     lifespan=lifespan,
@@ -266,7 +266,7 @@ def verify_api_key(api_key: str = Security(API_KEY_HEADER)) -> str:
 async def root():
     """Root endpoint."""
     return {
-        "message": "Garbage Model API",
+        "message": "Wee Model API",
         "docs": "/docs",
         "health": "/health",
     }
@@ -380,7 +380,7 @@ async def complete(
 if __name__ == "__main__":
     # Print startup info
     print("=" * 80)
-    print("🗑️  GARBAGE MODEL API")
+    print("🤏 WEE MODEL API")
     print("=" * 80)
     print(f"API Key: {VALID_API_KEY}")
     print("Endpoint: http://localhost:8080")

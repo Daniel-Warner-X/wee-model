@@ -7,7 +7,7 @@ A simple, standalone API service for getting model responses when pretty much an
 ### Clone this repo
 
 ```
-git@github.com:Daniel-Warner-X/garbage-model.git
+git@github.com:Daniel-Warner-X/wee-model.git
 ```
 
 ### Run the start script
@@ -26,11 +26,11 @@ After startup, you'll see:
 Service Information:
   Endpoint: http://localhost:8080
   API Docs: http://localhost:8080/docs
-  API Key:  grbg-abc123...
+  API Key:  wee-abc123...
   Model:    qwen2.5:7b
 
 Add this header to your requests:
-  X-API-Key: grbg-abc123...
+  X-API-Key: wee-abc123...
 =================================
 ```
 

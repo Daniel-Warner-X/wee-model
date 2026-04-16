@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Garbage Model - Startup Script
+# Wee Model - Startup Script
 # One-command setup for Ollama-based API service
 
 set -e
@@ -16,7 +16,7 @@ PORT="${PORT:-8080}"
 API_KEY="${API_KEY:-}"
 
 echo -e "${BLUE}=================================${NC}"
-echo -e "${BLUE}🗑️  Garbage Model API Startup${NC}"
+echo -e "${BLUE}🤏 Wee Model API Startup${NC}"
 echo -e "${BLUE}=================================${NC}"
 echo ""
 
@@ -75,7 +75,7 @@ echo -e "${GREEN}✓ Dependencies installed${NC}"
 # Generate API key if not provided
 if [ -z "$API_KEY" ]; then
     # Generate a random API key
-    API_KEY="grbg-$(openssl rand -hex 16 2>/dev/null || cat /dev/urandom | LC_ALL=C tr -dc 'a-f0-9' | head -c 32)"
+    API_KEY="wee-$(openssl rand -hex 16 2>/dev/null || cat /dev/urandom | LC_ALL=C tr -dc 'a-f0-9' | head -c 32)"
 fi
 
 export API_KEY

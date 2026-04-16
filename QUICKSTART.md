@@ -25,7 +25,7 @@ After startup, you'll see:
 Service Information:
   Endpoint: http://localhost:8080
   API Docs: http://localhost:8080/docs
-  API Key:  grbg-a1b2c3d4e5f6...
+  API Key:  wee-a1b2c3d4e5f6...
   Model:    qwen2.5:7b
 =================================
 ```
@@ -37,7 +37,7 @@ Service Information:
 ### Option A: Use the test script
 ```bash
 # In a new terminal
-export API_KEY="grbg-your-key-here"
+export API_KEY="wee-your-key-here"
 pip install requests
 python test_api.py
 ```
@@ -55,7 +55,7 @@ Open in browser: http://localhost:8080/docs
 ```python
 import requests
 
-API_KEY = "grbg-your-key-here"
+API_KEY = "wee-your-key-here"
 headers = {"X-API-Key": API_KEY}
 
 # Extract structured data

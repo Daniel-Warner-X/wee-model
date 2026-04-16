@@ -1,5 +1,5 @@
 """
-Test script for Garbage Model API
+Test script for Wee Model API
 Run after starting the API with ./start.sh
 """
 
@@ -106,7 +106,7 @@ def test_complete():
 def main():
     """Run all tests."""
     print("=" * 60)
-    print("🗑️  Garbage Model API Test Suite")
+    print("🤏 Wee Model API Test Suite")
     print("=" * 60)
     print(f"Base URL: {BASE_URL}")
     print(f"API Key: {API_KEY[:20]}...")

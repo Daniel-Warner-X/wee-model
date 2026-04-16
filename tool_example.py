@@ -1,5 +1,5 @@
 """
-Example of using tool/function calling with the Garbage Model API.
+Example of using tool/function calling with the Wee Model API.
 """
 
 import json
@@ -162,7 +162,7 @@ def chat_with_tools(user_message: str):
 
 def main():
     """Run examples."""
-    print("\n🗑️  Tool Calling Examples with Garbage Model API\n")
+    print("\n🤏 Tool Calling Examples with Wee Model API\n")
 
     # Example 1: Weather query
     chat_with_tools("What's the weather like in San Francisco?")
