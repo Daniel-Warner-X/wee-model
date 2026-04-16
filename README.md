@@ -2,12 +2,20 @@
 
 A simple, standalone API service for getting model responses when pretty much any model response will do.
 
+Uses qwen2.5:7b by default.
+
 ## Quickstart
 
 ### Clone this repo
 
 ```
 git@github.com:Daniel-Warner-X/wee-model.git
+```
+
+### Change directories
+
+```
+cd wee-model
 ```
 
 ### Run the start script
