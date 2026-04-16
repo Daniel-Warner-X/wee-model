@@ -1,4 +1,4 @@
-# Garbage Model
+# Wee Model
 
 A simple, standalone API service for getting model responses when pretty much any model response will do.
 
