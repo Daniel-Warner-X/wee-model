@@ -4,6 +4,8 @@
 
 A simple, standalone API service for getting model responses when pretty much any model response will do.
 
+The startup script uses `qwen2.5:7b` by default. Set `OLLAMA_MODEL` to use a different Ollama model.
+
 # Quick Start Guide
 
 ## 1. Start the API (one command)
@@ -148,4 +150,3 @@ brew install ollama
 ---
 
 **Questions?** The API follows standard REST conventions and uses FastAPI, so any FastAPI documentation applies here too.
-
