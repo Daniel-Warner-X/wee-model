@@ -80,6 +80,7 @@ fi
 
 export API_KEY
 export OLLAMA_MODEL="${MODEL}"
+export PORT
 
 echo ""
 echo -e "${BLUE}=================================${NC}"

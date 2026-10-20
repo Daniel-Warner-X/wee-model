@@ -4,30 +4,25 @@
 
 A simple, standalone API service for getting model responses when pretty much any model response will do.
 
-Uses qwen2.5:7b by default.
+# Quick Start Guide
 
-## Quickstart
-
-### Clone this repo
-
-```
-git@github.com:Daniel-Warner-X/wee-model.git
-```
-
-### Change directories
-
-```
-cd wee-model
-```
-
-### Run the start script
+## 1. Start the API (one command)
 
 ```bash
 ./start.sh
 ```
 
-After startup, you'll see:
+**That's it!** The script handles everything:
+- Checks dependencies
+- Starts Ollama
+- Pulls the model
+- Sets up Python environment
+- Generates API key
+- Starts the server
 
+## 2. Copy your credentials
+
+After startup, you'll see:
 ```
 =================================
 ✓ Setup complete!
@@ -36,115 +31,121 @@ After startup, you'll see:
 Service Information:
   Endpoint: http://localhost:8080
   API Docs: http://localhost:8080/docs
-  API Key:  wee-abc123...
+  API Key:  wee-a1b2c3d4e5f6...
   Model:    qwen2.5:7b
-
-Add this header to your requests:
-  X-API-Key: wee-abc123...
 =================================
 ```
 
-### 3. Test the health endpoint
+**Save the API key!** You'll need it for all requests.
 
-```
-curl http://localhost:8080/health | jq
-```  
+## 3. Test it
 
-### 4. Send a sample chat completion request
-
-```
-curl -X POST http://localhost:8080/chat -H "X-API-Key: your-api-key-here" -H "Content-Type: application/json" -d '{"messages": [{"role": "user", "content": "What is the capital of France?"}], "temperature": 0.7}'
-```
-
-### 5. Try tool/function calling
-
+### Option A: Use the test script
 ```bash
-python tool_example.py
+# In a new terminal
+export API_KEY="wee-your-key-here"
+pip install requests
+python test_api.py
 ```
 
-
-## Features
-
-- **Chat completions**: Standard chat interface
-- **Tool/function calling**: Let the model call functions you define
-- **Structured extraction**: Extract JSON data from text
-- **JSON formatting**: Request JSON-formatted responses
-
-## API documentation
-
-http://localhost:8080/docs
-
-## Tool/Function Calling
-
-The API supports tool/function calling, allowing the model to call functions you define. See `tool_example.py` for a complete example.
-
-Example request with tools:
-
+### Option B: Quick curl test
 ```bash
-curl -X POST http://localhost:8080/chat \
-  -H "X-API-Key: your-api-key-here" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [{"role": "user", "content": "What is the weather in Boston?"}],
-    "tools": [{
-      "type": "function",
-      "function": {
-        "name": "get_weather",
-        "description": "Get current weather for a location",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "location": {"type": "string"}
-          },
-          "required": ["location"]
-        }
-      }
-    }]
-  }'
+curl http://localhost:8080/health
 ```
 
-The response will include `tool_calls` when the model wants to call a function.
+### Option C: Browse interactive docs
+Open in browser: http://localhost:8080/docs
 
+## 4. Use it in your app
 
-## What the setup script does:
+```python
+import requests
 
-1. Check for Ollama installation
-2. Start Ollama service if needed
-3. Pull the `qwen2.5:7b` model
-4. Set up Python virtual environment
-5. Install dependencies
-6. Generate an API key
-7. Start the API server
+API_KEY = "wee-your-key-here"
+headers = {"X-API-Key": API_KEY}
+
+# Extract structured data
+response = requests.post(
+    "http://localhost:8080/extract",
+    headers=headers,
+    json={
+        "prompt": "Parse: Meeting tomorrow at 3pm in room 401",
+        "schema_description": '{"time": "string", "location": "string"}'
+    }
+)
+
+print(response.json()["data"])
+# {"time": "tomorrow at 3pm", "location": "room 401"}
+```
+
+## Common Use Cases
+
+### Intent Classification
+```python
+data = client.extract(
+    prompt="User says: I want to cancel my subscription",
+    schema_description='{"intent": "cancel|upgrade|support|info", "urgency": "low|medium|high"}'
+)
+```
+
+### Entity Extraction
+```python
+data = client.extract(
+    prompt="Send invoice to john@example.com for $299.99",
+    schema_description='{"email": "string", "amount": float, "currency": "string"}'
+)
+```
+
+### Sentiment Analysis
+```python
+data = client.extract(
+    prompt="This product is amazing! Best purchase ever!",
+    schema_description='{"sentiment": "positive|negative|neutral", "confidence": "low|medium|high"}'
+)
+```
 
 ## Configuration
 
-Environment variables (optional):
-
-- `OLLAMA_MODEL`: Model to use (default: `qwen2.5:7b`)
-- `API_KEY`: Custom API key (auto-generated if not set)
-- `PORT`: API port (default: `8080`)
-
-Example:
-```bash
-OLLAMA_MODEL=llama3.2:3b PORT=9000 ./start.sh
-```
-
-## Requirements
-
-- Python 3.8+
-- Ollama installed (`brew install ollama`)
-
-
-## Stopping the Service
-
-Press `Ctrl+C` to stop the API server.
-
-Ollama will keep running in the background. To stop it:
+Want to customize? Set environment variables before `./start.sh`:
 
 ```bash
-pkill ollama
+# Use a different model
+OLLAMA_MODEL=llama3.2:3b ./start.sh
+
+# Use a different port
+PORT=9000 ./start.sh
+
+# Use a custom API key
+API_KEY=my-secret-key ./start.sh
 ```
 
-## License
+## Stopping
 
-MIT
+Press `Ctrl+C` in the terminal running the API.
+
+## Troubleshooting
+
+**"Ollama not found"**
+```bash
+brew install ollama
+```
+
+**"Service not ready"**
+- Make sure Ollama is running: `pgrep ollama`
+- Check logs in the terminal
+
+**"403 Forbidden"**
+- Double-check your API key
+- Make sure you're sending the `X-API-Key` header
+
+## Next Steps
+
+- Read [README.md](README.md) for detailed documentation
+- Check [client_example.py](client_example.py) for Python client code
+- Run [test_api.py](test_api.py) to test all endpoints
+- Visit http://localhost:8080/docs for interactive API docs
+
+---
+
+**Questions?** The API follows standard REST conventions and uses FastAPI, so any FastAPI documentation applies here too.
+

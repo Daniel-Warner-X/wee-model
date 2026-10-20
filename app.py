@@ -378,13 +378,15 @@ async def complete(
 
 
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", "8080"))
+
     # Print startup info
     print("=" * 80)
     print("🤏 WEE MODEL API")
     print("=" * 80)
     print(f"API Key: {VALID_API_KEY}")
-    print("Endpoint: http://localhost:8080")
-    print("Docs: http://localhost:8080/docs")
+    print(f"Endpoint: http://localhost:{port}")
+    print(f"Docs: http://localhost:{port}/docs")
     print("=" * 80)
 
-    uvicorn.run(app, host="0.0.0.0", port=8080, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
